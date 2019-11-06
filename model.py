@@ -5,7 +5,7 @@ import torch.nn.functional as F
 class QNetwork(nn.Module):
     """Actor (Policy) Model."""
 
-    def __init__(self, state_size, action_size, seed, fc1_units=64, fc2_units=64):
+    def __init__(self, state_size, action_size, seed, fc1_units=64, fc2_units=64, dueling=False):
         """Initialize parameters and build model.
         Params
         ======
@@ -20,9 +20,19 @@ class QNetwork(nn.Module):
         self.fc1 = nn.Linear(state_size, fc1_units)
         self.fc2 = nn.Linear(fc1_units, fc2_units)
         self.fc3 = nn.Linear(fc2_units, action_size)
+        
+        self.dueling = dueling
+        # in order to implement dueling the state_value needs to be declared
+        self.state_value = nn.Linear(fc2_units, 1)
 
     def forward(self, state):
         """Build a network that maps state -> action values."""
         x = F.relu(self.fc1(state))
         x = F.relu(self.fc2(x))
-        return self.fc3(x)
+        
+        # use duleling only when required
+        if self.dueling:
+            # advantage values + state value
+            return self.fc3(x) + self.state_value(x)
+        else:
+            return self.fc3(x)
