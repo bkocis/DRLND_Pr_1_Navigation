@@ -45,31 +45,25 @@ I reference these sources, as they helped me a lot to get started with the imple
 
 #### 1. Q-learning
 
-#### 2. Deep Q Networks
+![](https://latex.codecogs.com/svg.latex?Y^{Q}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;maxQ(S_{t&plus;1},&space;a;&space;{\theta}_{t}))
+
+#### 2. Deep Q Networks (DQN)
+
+![](https://latex.codecogs.com/svg.latex?Y^{DQN}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;maxQ(S_{t&plus;1},&space;a;&space;{\theta}^{\\-}_{t}))
 
 #### 3. Double Q-learning
+
+![](https://latex.codecogs.com/svg.latex?Y^{DoubleQ}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},&space;argmaxQ(S_{t&plus;1},a;\theta_{t});&space;{\theta}^{\\'}_{t}))
 
 #### 4. Double Deep Q-Network
 
 #### 4.1 Theory
 
+DDQN is the same as the Double Q-learning, different only by the weights of the second network are replaced with the weights of the target network: 
+
+![](https://latex.codecogs.com/svg.latex?Y^{DoubleDQN}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},&space;argmaxQ(S_{t&plus;1},a;\theta_{t});&space;{\theta}^{\\-}_{t}))
+
 The idea of Double Q-learning is to reduce overestimations ... therefore propose to evaluate the greedy policy according to the online network, but using the target network to estimate its value. [Hasselt et al.](https://arxiv.org/pdf/1509.06461.pdf)
-Double DQN-s update is the same as for DQN, but replacing the target `Y^{DQN}_{t}` with `Y^{DoubleDQN}_{t} = R_{t}+1+γQ(St+1, argmaxQ(St+1, a; θt), θ^{−}_{t})`.
-Double DQN-s update is the same as for DQN, but replacing the target 
-
-![](https://latex.codecogs.com/svg.latex?Y^{DQN}_{t}&space;with&space;Y^{DoubleDQN}_{t}&space;=&space;R_{t}&plus;1&plus;γQ(St&plus;1,&space;argmaxQ(St&plus;1,&space;a;&space;θt),&space;θ^{−}_{t}))
-
-```latex 
-Y^{DQN}_{t} with Y^{DoubleDQN}_{t} = R_{t}+1+γQ(St+1, argmaxQ(St+1, a; θt), θ^{−}_{t})
-
-
-
-^2 + b^2 = c^2$$
-
-$$\begin{vmatrix}a & b\\
-c & d
-\end{vmatrix}=ad-bc$$
-```
 
 #### 4.2 Implementation
 
@@ -85,8 +79,13 @@ else:
 
 ```
 
+#### 5. Deep Learning model 
 
-#### 5. Dueling network
+For the implementation of the DQN, the definition of the Deep learning model is required, and in this examples it is given in the `model.py` file. 
+In this case a 3 layer fully connected network was used with ReLU activation functions. 
+
+
+#### 6. Dueling network
 
 In the rubric a reference to the [Dueling Networks](https://arxiv.org/abs/1511.06581) is provided. 
 Implemented in code by modifying the code in `model.py` as follows
@@ -106,9 +105,25 @@ else:
 ```
 
 
+
+#### 7. Epsilon greedy action selection 
+
+The selection of the next action after a step can be made as a random choice. This would correspond to something like a free exploration. The idea of epsilon greedy algorithm is to contain the selection of the next action based on the epsion value, similar to a threshold value for the random choise of actions. When overexposed, the agent choses same actions over and over again, which would lead to poor solutions of the environemnt. 
+The values of the epsion can be implemented as changing values with the learning progression. By defining an decay and end value, the epsion value will be updated for each learning step during the agent training. 
+
+The code implementation was present in the example code used from the Lunar landing example and was not modified (in the [`dqn_agent.py`](https://github.com/bkocis/DRLND_Pr_1_Navigation/blob/master/dqn_agent.py#L82#L86).
+
+
+#### 8. Agent training algorithm 
+
+The 
+
+
 ### 3. Results of experimenta of different settings and hyperparameter tuning 
 
 In the cource of the DQN code implementation I ran several experiments, and only the final ones are included in the `Navigation.ipynb` notebook. 
 In order to have some ground for comparison of the experiments, all of them have to be executed in the same session of environment load. Restarting the notebook between experiments would make the comparison of the hyperparameter tuning results false. 
 
+The greatest impact on the speed (number of episodes till desired score of 13 was reached) was due to the epsilon greedy algorithm. The `eps_decay` parameter, that sets basically the speed of the eps value decrease, was modified in the a few experiments. The least episodes needed to reach target score were obtained when the eps_decay value was set to 0.98. Lower values dod not produce much better results, as the agent becomes quite unstable (deduced empirically by observing the score plot and the large difference of socre values varying around the average). Value of eps_decay equal to 1 in this code implementation would mean no change of the epsilon values, means a total random choice of actions, which can be seen on the score plot as well. 
 
+Implementation of dueling and double DQN resulted only in a slight improvement in solving the environment, when both were used together. 
