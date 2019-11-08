@@ -57,6 +57,8 @@ The idea of Double Q-learning is to reduce overestimations ... therefore propose
 Double DQN-s update is the same as for DQN, but replacing the target `Y^{DQN}_{t}` with `Y^{DoubleDQN}_{t} = R_{t}+1+γQ(St+1, argmaxQ(St+1, a; θt), θ^{−}_{t})`.
 Double DQN-s update is the same as for DQN, but replacing the target 
 
+![](https://latex.codecogs.com/svg.latex?Y^{DQN}_{t}&space;with&space;Y^{DoubleDQN}_{t}&space;=&space;R_{t}&plus;1&plus;γQ(St&plus;1,&space;argmaxQ(St&plus;1,&space;a;&space;θt),&space;θ^{−}_{t}))
+
 ```latex 
 Y^{DQN}_{t} with Y^{DoubleDQN}_{t} = R_{t}+1+γQ(St+1, argmaxQ(St+1, a; θt), θ^{−}_{t})
 
