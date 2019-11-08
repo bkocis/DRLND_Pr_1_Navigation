@@ -1,5 +1,12 @@
 ## Project Navigation
-Implementation of Deep Q-Learning Algorithms for solving navigation in a small virtual environment and item collection
+##### Implementation of Deep Q-Learning Algorithms for solving navigation in a small virtual environment and item collection
+
+In the project an agent has to learn to collect the maximum number of bananas randomly spread inside a virtual playground. The agent can do basic movement (turning and moving) and every time he find a banana he gets a revard. If the banana is yellow he increases the score, and if case he hits a blue banana, the score decreaases by 1. 
+The goal of the agent is to maximize the reward score.
+
+The solution of this environemnt is atempted by implemention a Deep Q-network (DQN) algorithm. The DQN algorithm is a reinfocement learning application via the implementation of Q-learning method combined with a deep learning network. 
+
+
 
 Content:
 1. Approach 
@@ -10,10 +17,10 @@ Content:
 
 ### 1. Approach  
 
-The project description, installation and requirements are given in the README of the repository.
-In order to complete the project, I started from the code provided in the OpenAI Gym lunar landing example. 
-I modified the environment related settings on the provided `Navigation.ipynb` notebook. 
-I modified the environment relevant sections of the code:
+The project description, installation and requirements for setting up and running the viertual environment playgorund are given in the `README.me` in the root of the repository.
+
+In order to complete the project, I started out from the code provided in the OpenAI Gym Lunar Landing example. 
+I modified the environment relevant sections of the code in the following way:
 
 ```python
 # reset the environment
@@ -38,10 +45,14 @@ for t in range(max_t):
  
 ### 2. Learning algorithms and code implementation
 
-I reference these sources, as they helped me a lot to get started with the implementation of the algorithms.
-- [tommytracey's](https://github.com/tommytracey/DeepRL-P1-Navigation)
-- [glebashnik's](https://github.com/glebashnik/udacity-deep-reinforcement-learning-navigation)
+I reference the following sources, as they helped me to get started with the implementation of the algorithm:
+- [Navigation project of tommytracey's](https://github.com/tommytracey/DeepRL-P1-Navigation)
+- [Navigation project of glebashnik's](https://github.com/glebashnik/udacity-deep-reinforcement-learning-navigation)
 
+
+#### 2.1 Theory
+
+From the papaer of [Hasselt et al.](https://arxiv.org/pdf/1509.06461.pdf) I extracted some of the mathematical defeintions.
 
 #### a). Q-learning
 
@@ -61,9 +72,10 @@ DDQN differs from Double Q-learning only by the weights of the second network wh
 
 ![](https://latex.codecogs.com/svg.latex?Y^{DoubleDQN}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},&space;argmaxQ(S_{t&plus;1},a;\theta_{t});&space;{\theta}^{-}_{t}))
 
-The idea of Double Q-learning is to reduce overestimations ... therefore propose to evaluate the greedy policy according to the online network, but using the target network to estimate its value. [Hasselt et al.](https://arxiv.org/pdf/1509.06461.pdf)
+It is expected that the implementation of the Double Q-learning will reduce overestimations of the Q-learning algorithm.
+ 
 
-#### 4.2 Implementation
+#### 2.2 Implementation
 
 Only the learning method of the Agent class is modified. 
 Instead defining the next targets of the Q-Network as the maximum value of the targets, the states are gathered and the maximum value assigned to the next target

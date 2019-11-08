@@ -1,0 +1,9 @@
+e1-initial.pth
+e2-dueling.pth
+e3-dueling+ddqn.pth
+e4-dueling+ddqn.pth
+# e5-dueling+ddqn+eps_decay-0p98.pth
+e6-dueling+ddqn+eps_decay-0p97.pth
+e8-dqn_Replay_Buffer-1e5.pth
+e8-dqn_Replay_Buffer-1e8.pth
+
