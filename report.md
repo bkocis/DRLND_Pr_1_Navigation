@@ -57,17 +57,17 @@ The idea of Double Q-learning is to reduce overestimations ... therefore propose
 Double DQN-s update is the same as for DQN, but replacing the target `Y^{DQN}_{t}` with `Y^{DoubleDQN}_{t} = R_{t}+1+γQ(St+1, argmaxQ(St+1, a; θt), θ^{−}_{t})`.
 Double DQN-s update is the same as for DQN, but replacing the target 
 
-```math 
+```latex 
 Y^{DQN}_{t} with Y^{DoubleDQN}_{t} = R_{t}+1+γQ(St+1, argmaxQ(St+1, a; θt), θ^{−}_{t})
-```
 
 
-`^2 + b^2 = c^2$$`
 
-`$$\begin{vmatrix}a & b\\
+^2 + b^2 = c^2$$
+
+$$\begin{vmatrix}a & b\\
 c & d
-\end{vmatrix}=ad-bc$$`
-
+\end{vmatrix}=ad-bc$$
+```
 
 #### 4.2 Implementation
 
