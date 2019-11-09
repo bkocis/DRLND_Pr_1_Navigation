@@ -57,11 +57,12 @@ The goal of the agent is to interact with the emulator by selecting actions in a
 Some of the mathematical definitions are summarized in this section:
 
 #### a). Q-learning
-Action-value function can be defined as the maximum sum of reward srt discounted by c at each timestep t, achievable by a behaviour policy p 5 P(ajs), after making an observation (s) and taking an action (a) [[Mnih at al.](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)]
+Action-value function can be defined as the maximum sum of reward srt discounted by c at each timestep t, achievable by a behaviour policy p 5 P(ajs), after making an observation (s) and taking an action (a) [[Mnih at al.(2015)](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)]
 
 ![](https://latex.codecogs.com/svg.latex?Q^{*}(s,a)=\underset{\pi}{\mathrm{max}}E[r_{t}&plus;\gamma&space;r_{t&plus;1}&plus;\gamma^2r_{t&plus;2}&plus;...|s_t=s,a_t=a,\pi])
 
-From [Hasselt et al.](https://arxiv.org/pdf/1509.06461.pdf) the 
+From [Hasselt et al.(2015)](https://arxiv.org/pdf/1509.06461.pdf) the __target action-value funtion__ is noted with __Y__
+ 
 ![](https://latex.codecogs.com/svg.latex?Y^{Q}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;maxQ(S_{t&plus;1},&space;a;&space;{\theta}_{t}))
 
 #### b). Deep Q Networks (DQN)
@@ -74,6 +75,7 @@ From [Hasselt et al.](https://arxiv.org/pdf/1509.06461.pdf) the
 
 #### d). Double Deep Q-Network (DDQN)
 
+DDQN is introduced by the authors in order to reduce overestimations of the network by decomposing the max operation in the target into action selection and action evaluation. 
 It is expected that the implementation of the Double Q-learning will reduce overestimations of the Q-learning algorithm. DDQN differs from Double Q-learning only by the weights of the second network which are replaced with the weights of the target network:
 
 ![](https://latex.codecogs.com/svg.latex?Y^{DoubleDQN}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},&space;argmaxQ(S_{t&plus;1},a;\theta_{t});&space;{\theta}^{-}_{t}))
@@ -161,10 +163,10 @@ In order to have some ground for comparison of the experiments, all of them have
 
 The greatest impact on the speed (number of episodes till desired score of 13 was reached) was due to the epsilon greedy algorithm. The `eps_decay` parameter, that sets basically the speed of the eps value decrease, was modified in a few experiments. The least episodes needed to reach target score were obtained when the eps_decay value was set to 0.98. Lower values did not produce much better results, as the agent becomes quite unstable (deduced empirically by observing the score plot and the large difference of score values varying around the average). Value of eps_decay equal to 1 in this code implementation would mean no change of the epsilon values, means a total random choice of actions, which can be seen on the score plot as well. 
 
-<figure>
-	<img src="./assets/best_result.png">
-	<figcaption>__Fig.1__ Best result in 250 episodes.</figcaption>
-</figure>
+
+<img src="./assets/best_result.png">
+__Fig.1__ Best result in 250 episodes.
+
 
 <br>
 
@@ -172,10 +174,9 @@ Implementation of dueling and double DQN resulted only in a slight improvement i
 
 The results of the agent training models are compared in the end using the `test(agent)` method (see Fig.2.). The rolling mean value of the episode average scores have been calculated for each of the experiments. The results show that indeed the best performing agent is trained with the eps_decay value of 0.98 (marked with purple line in the plot).
 
-<figure>
-	<img src="./assets/agent_comparison.png">
-	<figcaption>__Fig.2__ Comparison of test run of the agents trained in the experiments. The plot shows the rolling mean value of the average scores in end of episodes. </figcaption>
-</figure>
+<img src="./assets/agent_comparison.png">
+__Fig.2__ Comparison of test run of the agents trained in the experiments. The plot shows the rolling mean value of the average scores in end of episodes.
+
 
 <br>
 
@@ -184,7 +185,7 @@ Replay buffer size experiments show that that size of the memory buffer for stor
 
 Log of the experiments: 
 
-Note: n_episodes limit was set to 800
+Note: `n_episodes` limit was set to 800
 
 |Experiment ID | *pth filename | #episode at score > 13 | eps_decay | dueling DQN | double DQN | Replay buffer size | Note |
 |---|---|---|---|---|---|---| --- |
