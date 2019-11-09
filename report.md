@@ -73,12 +73,12 @@ From [Hasselt et al.(2015)](https://arxiv.org/pdf/1509.06461.pdf) the __target a
 
 #### b). Deep Q Networks (DQN)
 
-![](https://latex.codecogs.com/svg.latex?Y^{DQN}(t)=R_{t&plus;1}&plus;\gamma\underset{a}{\mathrm{max}}Q(S_{t&plus;1},a;\theta_{t}^{-}))
+![](https://latex.codecogs.com/svg.latex?Y^{DQN}(t)=R_{t&plus;1}&plus;\gamma\underset{a}{\mathrm{max}}Q(S_{t&plus;1},a;\theta^{-}_{t}))
 
 #### c). Double Q-learning
 
 
-![](https://latex.codecogs.com/svg.latex?Y^{DoubleQ}(t)=R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1}),\underset{a}{\mathrm{argmax}}Q(S_{t&plus;1},a;\theta_{t});\theta^{'}_{t}))
+![](https://latex.codecogs.com/svg.latex?Y^{DoubleQ}(t)=R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},\underset{a}{\mathrm{argmax}}Q(S_{t&plus;1},a;\theta_{t});\theta^{'}_{t}))
 
 #### d). Double Deep Q-Network (DDQN)
 
@@ -86,7 +86,7 @@ DDQN is introduced by the authors in order to reduce overestimations of the netw
 It is expected that the implementation of the Double Q-learning will reduce overestimations of the Q-learning algorithm. DDQN differs from Double Q-learning only by the weights of the second network which are replaced with the weights of the target network:
 
 
-![](https://latex.codecogs.com/svg.latex?Y^{DoubleDQN}(t)=R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1}),\underset{a}{\mathrm{argmax}}Q(S_{t&plus;1},a;\theta_{t});\theta^{-}_{t}))
+![](https://latex.codecogs.com/svg.latex?Y^{DoubleDQN}(t)=R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},\underset{a}{\mathrm{argmax}}Q(S_{t&plus;1},a;\theta_{t});\theta^{-}_{t}))
 
  
 The double DQN network was implemented by modifying only the learning method of the Agent class in the `dqn_agent.py`. Instead defining the next targets of the Q-Network as the maximum value of the targets, the states are gathered and the maximum value assigned to the next target
@@ -111,7 +111,7 @@ In this case a 3 layer fully connected network was used with ReLU activation fun
 
 #### 2.3 Dueling network
 
-In the rubric a reference to the [Dueling Networks](https://arxiv.org/abs/1511.06581) is provided. 
+In the rubric a reference to the paper of [Wang et al (2016)](https://arxiv.org/abs/1511.06581) is provided. 
 Implemented in code by modifying the code in `model.py` as follows
 
 ```python
@@ -132,8 +132,8 @@ else:
 
 #### 2.4 Epsilon greedy action selection 
 
-The selection of the next action after a step can be made as a random choice. This would correspond to something like a free exploration. The idea of epsilon greedy algorithm is to contain the selection of the next action based on the epsilon value, similar to a threshold value for the random choice of actions. When overexposed, the agent chooses same actions over and over again, which would lead to poor solutions of the environment. 
-The values of the epsilon can be implemented as changing values with the learning progression. By defining an decay and end value, the epsilon value will be updated for each learning step during the agent training. 
+The selection of the next action after a step can be made as a random choice. This would correspond to free exploration behavior. The idea of epsilon greedy algorithm is to contain the selection of the next action based on a value epsilon, similar to a threshold value for the random choice of actions. When the epsilon valeu is high, the agent chooses the same actions over and over again, which would lead to poor solutions of the environment. When the epsilon value is low, the choce of the actions are nearly random.
+The values of the epsilon can change with the learning progression, by defining a decay factor and end value. In the implementation the epsilon value starts with high values and it is updated to a lower value for each learning step during the agent training. 
 
 The code implementation was present in the example code used from the Lunar landing example and was not modified (in the [`dqn_agent.py`](https://github.com/bkocis/DRLND_Pr_1_Navigation/blob/master/dqn_agent.py#L82#L86).
 
@@ -153,7 +153,7 @@ Steps
 - the Mean-Square-Error loss is calculated between the target and extected action-value functions
 - the loss is minimized in the backpropagation step 
 
-The `learn` method is put into action the the `step` method of the `Agent` class. Further on, the `step` methods is executed iterativelly in the `dqn` method of the main code section.
+The `learn` method is put into action in the `step` method of the `Agent` class. Further on, the `step` methods is executed iterativelly in the `dqn` method of the main code section.
 
 
 #### 2.6 Replay buffer / experience replay
@@ -166,10 +166,10 @@ I also investigated the effect of the buffer size on the agent training (see Exp
 
 ### 3. Results of experiments with different settings and hyperparameter tuning 
 
-In the course of the DQN code implementation I ran several experiments, and only the final ones are included in the `Navigation.ipynb` notebook. 
-In order to have some ground for comparison of the experiments, all of them have to be executed in the same session of environment load. Restarting the notebook between experiments would make the comparison of the hyperparameter tuning results false. 
+In the course of the DQN code implementation I ran several experiments which are included in the `Navigation.ipynb` notebook. 
+In order to have some ground for comparison of the experiments, all of them have to be executed in the same session of environment load. Restarting the notebook between experiments would make the comparison of the hyperparameter tuning results false due to the random placement of bananas at environment initialization. 
 
-The greatest impact on the speed (number of episodes till desired score of 13 was reached) was due to the epsilon greedy algorithm. The `eps_decay` parameter, that sets basically the speed of the eps value decrease, was modified in a few experiments. The least episodes needed to reach target score were obtained when the eps_decay value was set to 0.98. Lower values did not produce much better results, as the agent becomes quite unstable (deduced empirically by observing the score plot and the large difference of score values varying around the average). Value of eps_decay equal to 1 in this code implementation would mean no change of the epsilon values, means a total random choice of actions, which can be seen on the score plot as well. 
+The greatest impact on the speed (number of episodes till desired score of 13 was reached) was due to the epsilon greedy algorithm. The `eps_decay` parameter, that sets the epsilon value decrease, was modified in a few experiments. The best agent that reached the target score with the leeast number of training episodes was obtained when the eps_decay value was set to 0.98 (Fig.1.). Lower values did not produce better results, as the agent becomes quite unstable (large score variance). Value of eps_decay equal to 1 in this code implementation would mean no change of the epsilon values, which led to total random choice of actions (Experiment 7 in the `Navigation.ipynb`). 
 
 
 <img src="./assets/best_result.png">
@@ -179,15 +179,15 @@ __Fig__.__1__ Best result in 250 episodes.
 
 Implementation of dueling and double DQN resulted only in a slight improvement in solving the environment, when both were used together. 
 
-The results of the agent training models are compared in the end using the `test(agent)` method (see Fig.2.). The rolling mean value of the episode average scores have been calculated for each of the experiments. The results show that indeed the best performing agent is trained with the eps_decay value of 0.98 (marked with purple line in the plot).
+Replay buffer size experiments show that that size of the memory buffer for storing the experience tuples has to be around 1e5. Interestingly, higher values for the buffer size (1e8) did not improve the overall agent performance. 
+
+
+The results of the agent training models are compared in the end using the `test(agent)` method (see Fig.2.). The rolling mean value of the episode average scores have been calculated for each of the experiments. The results show that indeed the best performing agent is trained with the eps_decay value of 0.98 ( e5 marked with purple line in the plot).
 
 <img src="./assets/agent_comparison.png">
 
 __Fig__.__2__ Comparison of test run of the agents trained in the experiments. The plot shows the rolling mean value of the average scores in end of episodes.
 
-
-
-Replay buffer size experiments show that that size of the memory buffer for storing the experience tuples has to be around 1e5. Interestingly, higher values for the buffer size (1e8) did not improve the overall agent performance. 
 
 
 Log of the experiments: 
