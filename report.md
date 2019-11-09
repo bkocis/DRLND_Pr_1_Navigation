@@ -1,10 +1,10 @@
 ## Project Navigation
 ##### Implementation of Deep Q-Learning Algorithms for solving navigation in a small virtual environment and item collection
 
-In the project an agent has to learn to collect the maximum number of bananas randomly spread inside a virtual playground. The agent can do basic movement (turning and moving) and every time he find a banana he gets a revard. If the banana is yellow he increases the score, and if case he hits a blue banana, the score decreaases by 1. 
+In the project an agent has to learn to collect the maximum number of bananas randomly spread inside a virtual playground. The agent can do basic movement (turning and moving) and every time he find a banana he gets a reward. If the banana is yellow he increases the score, and if case he hits a blue banana, the score decreases by 1. 
 The goal of the agent is to maximize the reward score.
 
-The solution of this environemnt is atempted by implemention a Deep Q-network (DQN) algorithm. The DQN algorithm is a reinfocement learning application via the implementation of Q-learning method combined with a deep learning network. 
+The solution of this environment was attempted by implementation a Deep Q-network (DQN) algorithm. The DQN algorithm is a reinforcement learning application via the implementation of Q-learning method combined with a deep learning network. 
 
 
 
@@ -17,7 +17,7 @@ Content:
 
 ### 1. Approach  
 
-The project description, installation and requirements for setting up and running the viertual environment playgorund are given in the `README.me` in the root of the repository.
+The project description, installation and requirements for setting up and running the virtual environment playground are given in the `README.me` in the root of the repository.
 
 In order to complete the project, I started out from the code provided in the OpenAI Gym Lunar Landing example. 
 I modified the environment relevant sections of the code in the following way:
@@ -50,12 +50,18 @@ I reference the following sources, as they helped me to get started with the imp
 - [Navigation project of glebashnik's](https://github.com/glebashnik/udacity-deep-reinforcement-learning-navigation)
 
 
-#### 2.1 Theory
+#### 2.1 Reinforcement Learning algorithms
 
-From the papaer of [Hasselt et al.](https://arxiv.org/pdf/1509.06461.pdf) I extracted some of the mathematical defeintions.
+The goal of the agent is to interact with the emulator by selecting actions in a way that maximizes future rewards. The optimal action-value function is defined to maximize the expected reward.
+
+Some of the mathematical definitions are summarized in this section:
 
 #### a). Q-learning
+Action-value function can be defined as the maximum sum of reward srt discounted by c at each timestep t, achievable by a behaviour policy p 5 P(ajs), after making an observation (s) and taking an action (a) [[Mnih at al.](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)]
 
+![](https://latex.codecogs.com/svg.latex?Q^{*}(s,a)=\underset{\pi}{\mathrm{max}}E[r_{t}&plus;\gamma&space;r_{t&plus;1}&plus;\gamma^2r_{t&plus;2}&plus;...|s_t=s,a_t=a,\pi])
+
+From [Hasselt et al.](https://arxiv.org/pdf/1509.06461.pdf) the 
 ![](https://latex.codecogs.com/svg.latex?Y^{Q}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;maxQ(S_{t&plus;1},&space;a;&space;{\theta}_{t}))
 
 #### b). Deep Q Networks (DQN)
@@ -66,19 +72,14 @@ From the papaer of [Hasselt et al.](https://arxiv.org/pdf/1509.06461.pdf) I extr
 
 ![](https://latex.codecogs.com/svg.latex?Y^{DoubleQ}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},&space;argmaxQ(S_{t&plus;1},a;\theta_{t});&space;{\theta}^{'}_{t}))
 
-#### d). Double Deep Q-Network
+#### d). Double Deep Q-Network (DDQN)
 
-DDQN differs from Double Q-learning only by the weights of the second network which are replaced with the weights of the target network: 
+It is expected that the implementation of the Double Q-learning will reduce overestimations of the Q-learning algorithm. DDQN differs from Double Q-learning only by the weights of the second network which are replaced with the weights of the target network:
 
 ![](https://latex.codecogs.com/svg.latex?Y^{DoubleDQN}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},&space;argmaxQ(S_{t&plus;1},a;\theta_{t});&space;{\theta}^{-}_{t}))
 
-It is expected that the implementation of the Double Q-learning will reduce overestimations of the Q-learning algorithm.
  
-
-#### 2.2 Implementation
-
-Only the learning method of the Agent class is modified. 
-Instead defining the next targets of the Q-Network as the maximum value of the targets, the states are gathered and the maximum value assigned to the next target
+The double DQN network was implemented by modifying only the learning method of the Agent class in the `dqn_agent.py`. Instead defining the next targets of the Q-Network as the maximum value of the targets, the states are gathered and the maximum value assigned to the next target
 
 ```python
 if self.ddqn:
@@ -89,13 +90,16 @@ else:
 
 ```
 
-#### 5. Deep Learning model 
+A very intuitive explanation of the `torch.gather` method can be found in [this post](https://stackoverflow.com/a/54706716/2269826).
+
+
+#### 2.2. Deep Learning model 
 
 For the implementation of the DQN, the definition of the Deep learning model is required, and in this examples it is given in the `model.py` file. 
 In this case a 3 layer fully connected network was used with ReLU activation functions. 
 
 
-#### 6. Dueling network
+#### 2.3 Dueling network
 
 In the rubric a reference to the [Dueling Networks](https://arxiv.org/abs/1511.06581) is provided. 
 Implemented in code by modifying the code in `model.py` as follows
@@ -116,24 +120,94 @@ else:
 
 
 
-#### 7. Epsilon greedy action selection 
+#### 2.4 Epsilon greedy action selection 
 
-The selection of the next action after a step can be made as a random choice. This would correspond to something like a free exploration. The idea of epsilon greedy algorithm is to contain the selection of the next action based on the epsion value, similar to a threshold value for the random choice of actions. When overexposed, the agent chooses same actions over and over again, which would lead to poor solutions of the environment. 
-The values of the epsion can be implemented as changing values with the learning progression. By defining an decay and end value, the epsion value will be updated for each learning step during the agent training. 
+The selection of the next action after a step can be made as a random choice. This would correspond to something like a free exploration. The idea of epsilon greedy algorithm is to contain the selection of the next action based on the epsilon value, similar to a threshold value for the random choice of actions. When overexposed, the agent chooses same actions over and over again, which would lead to poor solutions of the environment. 
+The values of the epsilon can be implemented as changing values with the learning progression. By defining an decay and end value, the epsilon value will be updated for each learning step during the agent training. 
 
 The code implementation was present in the example code used from the Lunar landing example and was not modified (in the [`dqn_agent.py`](https://github.com/bkocis/DRLND_Pr_1_Navigation/blob/master/dqn_agent.py#L82#L86).
 
 
-#### 8. Agent training algorithm 
+#### 2.5 Agent training algorithm 
 
-The 
+`learning` method of the `Agent` class in the `dqn_agent.py` file
+
+Steps
+- the action-value function is initialized 
+- the target action-value function is initialized  
+- The experience tuples for each timestep are stored in the buffer 
+- the buffer is samples and the Q-learning is updated 
+- the next steps for the target action-valeu function (`Q_targets_next`) are obtained as the maximum value of the target model
+- the target action-value function is computed for the current states (`Q_targets`)
+- expected Q-values are obtained from the action-value function (`Q_expected`)
+- the Mean-Square-Error loss is calculated between the target and extected action-value functions
+- the loss is minimized in the backpropagation step 
+
+The `learn` method is put into action the the `step` method of the `Agent` class. Further on, the `step` methods is executed iterativelly in the `dqn` method of the main code section.
 
 
-### 3. Results of experimenta of different settings and hyperparameter tuning 
+#### 2.6 Replay buffer / experience replay
 
-In the cource of the DQN code implementation I ran several experiments, and only the final ones are included in the `Navigation.ipynb` notebook. 
+In the code implementation in the `dqn_agent.py` a fixed size buffer is defined for the storage of the experience tuples. The stored tuples are called randomly in the `sample` method. 
+Without the stored experience tuples (action, state, reward, next state), the agent always acts randomly. When the agent has access to previous tuples, it can recall actions that gave positive reward and so repeat certain moves.  
+
+I also investigated the effect of the buffer size on the agent training (see Experiment 8 in the `Navigation.ipynb`).
+
+
+### 3. Results of experiments with different settings and hyperparameter tuning 
+
+In the course of the DQN code implementation I ran several experiments, and only the final ones are included in the `Navigation.ipynb` notebook. 
 In order to have some ground for comparison of the experiments, all of them have to be executed in the same session of environment load. Restarting the notebook between experiments would make the comparison of the hyperparameter tuning results false. 
 
 The greatest impact on the speed (number of episodes till desired score of 13 was reached) was due to the epsilon greedy algorithm. The `eps_decay` parameter, that sets basically the speed of the eps value decrease, was modified in a few experiments. The least episodes needed to reach target score were obtained when the eps_decay value was set to 0.98. Lower values did not produce much better results, as the agent becomes quite unstable (deduced empirically by observing the score plot and the large difference of score values varying around the average). Value of eps_decay equal to 1 in this code implementation would mean no change of the epsilon values, means a total random choice of actions, which can be seen on the score plot as well. 
 
+<figure>
+	<img src="./assets/best_result.png">
+	<figcaption>__Fig.1__ Best result in 250 episodes.</figcaption>
+</figure>
+
+<br>
+
 Implementation of dueling and double DQN resulted only in a slight improvement in solving the environment, when both were used together. 
+
+The results of the agent training models are compared in the end using the `test(agent)` method (see Fig.2.). The rolling mean value of the episode average scores have been calculated for each of the experiments. The results show that indeed the best performing agent is trained with the eps_decay value of 0.98 (marked with purple line in the plot).
+
+<figure>
+	<img src="./assets/agent_comparison.png">
+	<figcaption>__Fig.2__ Comparison of test run of the agents trained in the experiments. The plot shows the rolling mean value of the average scores in end of episodes. </figcaption>
+</figure>
+
+<br>
+
+Replay buffer size experiments show that that size of the memory buffer for storing the experience tuples has to be around 1e5. Interestingly, higher values for the buffer size (1e8) did not improve the overall agent performance. 
+
+
+Log of the experiments: 
+
+Note: n_episodes limit was set to 800
+
+|Experiment ID | *pth filename | #episode at score > 13 | eps_decay | dueling DQN | double DQN | Replay buffer size | Note |
+|---|---|---|---|---|---|---| --- |
+| 1 |'e1-initial.pth'| 418 | 0.995 | False | False | 1e5 | |
+| 2 |'e2-dueling.pth'| 430 | 0.995 | True | False | 1e5 | |
+| 3 |'e3-ddqn.pth'| 423 | 0.995 | False | True | 1e5 | |
+| 4 |'e4-dueling+ddqn.pth'| 409 | 0.995 | True | True | 1e5 | |
+| 5 |'e5-dueling+ddqn+eps_decay-0p98.pth'| 250 | 0.98 | True | True | 1e5 | |
+| 6 |'e6-dueling+ddqn+eps_decay-0p97.pth'| 378 | 0.97 | True | True | 1e5 | |
+| 7 |NaN | NaN | 1.0  | True | True | 1e5 | checkpoint not save - totaly random agent, scores average at 0|
+| 8a |NaN| NaN | 0.98 | True | True |1e3 | after 800 episodes the score was ~12 |  
+| 8b |'e8-dqn_Replay_Buffer-1e5.pth'| 268 | 0.98 | True | True | 1e5 | |  
+| 8c |'e8-dqn_Replay_Buffer-1e8.pth'| 299 | 0.98 | True | True | 1e8 | |  
+
+
+
+
+### 4. Ideas for future work for agent performance improvement 
+
+- Grid search and hyperparameter tuning - extensive search in the solution space might result in 
+
+- Algorithm improvement: the scores of the training fluctuate a lot (see in Fig.1.), and apparently, it correlated with the length of the training (number of episodes). In this example the decay is linear (line `eps = max(eps_end, eps_decay*eps) # decrease epsilon` in the `dqn` method). Maybe an alternative function for the epsilon decay can be implemented for example `eps_decay*eps**2` of `eps_decay*exp(eps)`. 
+
+- Prioritized experience replay - in the current implementation the code contains experience replay. Further work could be done on the implementation of Prioritized experience replay. 
+
+- Learning from pixels 
