@@ -165,20 +165,19 @@ The greatest impact on the speed (number of episodes till desired score of 13 wa
 
 
 <img src="./assets/best_result.png">
-__Fig.1__ Best result in 250 episodes.
 
+__Fig__.__1__ Best result in 250 episodes.
 
-<br>
 
 Implementation of dueling and double DQN resulted only in a slight improvement in solving the environment, when both were used together. 
 
 The results of the agent training models are compared in the end using the `test(agent)` method (see Fig.2.). The rolling mean value of the episode average scores have been calculated for each of the experiments. The results show that indeed the best performing agent is trained with the eps_decay value of 0.98 (marked with purple line in the plot).
 
 <img src="./assets/agent_comparison.png">
-__Fig.2__ Comparison of test run of the agents trained in the experiments. The plot shows the rolling mean value of the average scores in end of episodes.
+
+__Fig__.__2__ Comparison of test run of the agents trained in the experiments. The plot shows the rolling mean value of the average scores in end of episodes.
 
 
-<br>
 
 Replay buffer size experiments show that that size of the memory buffer for storing the experience tuples has to be around 1e5. Interestingly, higher values for the buffer size (1e8) did not improve the overall agent performance. 
 
