@@ -1,3 +1,4 @@
+latex_formulas.txt
 e1-initial.pth
 e2-dueling.pth
 e3-dueling+ddqn.pth

@@ -52,33 +52,41 @@ I reference the following sources, as they helped me to get started with the imp
 
 #### 2.1 Reinforcement Learning algorithms
 
-The goal of the agent is to interact with the emulator by selecting actions in a way that maximizes future rewards. The optimal action-value function is defined to maximize the expected reward.
+The goal of the agent is to interact with the environment by selecting actions in a way that maximizes future rewards. The optimal action-value function (Q) is defined to maximize the expected reward.
 
 Some of the mathematical definitions are summarized in this section:
 
 #### a). Q-learning
-Action-value function can be defined as the maximum sum of reward srt discounted by c at each timestep t, achievable by a behaviour policy p 5 P(ajs), after making an observation (s) and taking an action (a) [[Mnih at al.(2015)](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)]
+Action-value function can be defined as the maximum sum of rewards r<sub>t</sub> discounted by 𝛾 at each timestep t, achievable by a behaviour policy 𝜋=P(a|s), after making an observation (s) and taking an action (a) [[Mnih at al.(2015)](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)]
 
 ![](https://latex.codecogs.com/svg.latex?Q^{*}(s,a)=\underset{\pi}{\mathrm{max}}E[r_{t}&plus;\gamma&space;r_{t&plus;1}&plus;\gamma^2r_{t&plus;2}&plus;...|s_t=s,a_t=a,\pi])
 
-From [Hasselt et al.(2015)](https://arxiv.org/pdf/1509.06461.pdf) the __target action-value funtion__ is noted with __Y__
+Estimates for the optimal action values can be learned using Q-learning by learning a parameterized value function Q(s, a; θ<sub>t</sub>).
+The Q-learning update after action A and state S, immediate reward R <sub>t+1</sub>, and state S<sub>t+1</sub> is:
+
+![](https://latex.codecogs.com/svg.latex?\theta_{t&plus;1}=\theta_t&plus;\alpha&space;(Y_{t}^{Q}-Q(S_t,A_t;\theta_t))\nabla_{\theta_t}Q(S_t,A_t;\theta_t))
+
+From [Hasselt et al.(2015)](https://arxiv.org/pdf/1509.06461.pdf) the __target action-value funtion__ is noted with __Y__, and the reward with capital R
  
-![](https://latex.codecogs.com/svg.latex?Y^{Q}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;maxQ(S_{t&plus;1},&space;a;&space;{\theta}_{t}))
+![](https://latex.codecogs.com/svg.latex?Y^{Q}(t)=R_{t&plus;1}&plus;\gamma\underset{a}{\mathrm{max}}Q(S_{t&plus;1},a;\theta_{t}))
+
 
 #### b). Deep Q Networks (DQN)
 
-![](https://latex.codecogs.com/svg.latex?Y^{DQN}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;maxQ(S_{t&plus;1},&space;a;&space;{\theta}^{\\-}_{t}))
+![](https://latex.codecogs.com/svg.latex?Y^{DQN}(t)=R_{t&plus;1}&plus;\gamma\underset{a}{\mathrm{max}}Q(S_{t&plus;1},a;\theta_{t}^{-}))
 
 #### c). Double Q-learning
 
-![](https://latex.codecogs.com/svg.latex?Y^{DoubleQ}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},&space;argmaxQ(S_{t&plus;1},a;\theta_{t});&space;{\theta}^{'}_{t}))
+
+![](https://latex.codecogs.com/svg.latex?Y^{DoubleQ}(t)=R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1}),\underset{a}{\mathrm{argmax}}Q(S_{t&plus;1},a;\theta_{t});\theta^{'}_{t}))
 
 #### d). Double Deep Q-Network (DDQN)
 
 DDQN is introduced by the authors in order to reduce overestimations of the network by decomposing the max operation in the target into action selection and action evaluation. 
 It is expected that the implementation of the Double Q-learning will reduce overestimations of the Q-learning algorithm. DDQN differs from Double Q-learning only by the weights of the second network which are replaced with the weights of the target network:
 
-![](https://latex.codecogs.com/svg.latex?Y^{DoubleDQN}_{t}&space;=&space;R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1},&space;argmaxQ(S_{t&plus;1},a;\theta_{t});&space;{\theta}^{-}_{t}))
+
+![](https://latex.codecogs.com/svg.latex?Y^{DoubleDQN}(t)=R_{t&plus;1}&plus;\gamma&space;Q(S_{t&plus;1}),\underset{a}{\mathrm{argmax}}Q(S_{t&plus;1},a;\theta_{t});\theta^{-}_{t}))
 
  
 The double DQN network was implemented by modifying only the learning method of the Agent class in the `dqn_agent.py`. Instead defining the next targets of the Q-Network as the maximum value of the targets, the states are gathered and the maximum value assigned to the next target
@@ -95,7 +103,7 @@ else:
 A very intuitive explanation of the `torch.gather` method can be found in [this post](https://stackoverflow.com/a/54706716/2269826).
 
 
-#### 2.2. Deep Learning model 
+#### 2.2. Deep Learning network  
 
 For the implementation of the DQN, the definition of the Deep learning model is required, and in this examples it is given in the `model.py` file. 
 In this case a 3 layer fully connected network was used with ReLU activation functions. 
