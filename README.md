@@ -2,13 +2,19 @@
 
 [image1]: https://user-images.githubusercontent.com/10624937/42135619-d90f2f28-7d12-11e8-8823-82b970a54d7e.gif "Trained Agent"
 
-# Udacity Deep Reinforcement Learning Nanodegree Project Navigation
+### Udacity Deep Reinforcement Learning Nanodegree 
+# Project Navigation
 
 ### Introduction
 
 For this project, you will train an agent to navigate (and collect bananas!) in a large, square world.  
 
 ![Trained Agent][image1]
+
+
+In the project an agent has to learn to collect the maximum number of bananas randomly spread inside a virtual playground. The agent can do basic movement (turning and moving) and every time he find a banana he gets a reward. If the banana is yellow he increases the score, and if case he hits a blue banana, the score decreases by 1. The goal of the agent is to maximize the reward score.
+
+The solution of this environment was attempted by implementation a Deep Q-network (DQN) algorithm. The DQN algorithm is a reinforcement learning application via the implementation of Q-learning method combined with a deep learning network.
 
 A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana.  Thus, the goal of your agent is to collect as many yellow bananas as possible while avoiding blue bananas.  
 
@@ -18,7 +24,12 @@ The state space has 37 dimensions and contains the agent's velocity, along with 
 - **`2`** - turn left.
 - **`3`** - turn right.
 
-The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
+The task is episodic, and in order to solve the environment, your agent must get an average score of +13.
+
+### Report 
+
+__The final report summarizing the code implementation and my solution of the environemnt is in the [`report.md`](https://github.com/bkocis/DRLND_Pr_1_Navigation/blob/master/report.md)__
+
 
 ### Getting Started
 
