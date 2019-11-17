@@ -26,10 +26,6 @@ The state space has 37 dimensions and contains the agent's velocity, along with 
 
 The task is episodic, and in order to solve the environment, your agent must get an average score of +13.
 
-### Report 
-
-__The final report summarizing the code implementation and my solution of the environemnt is in the [`report.md`](https://github.com/bkocis/DRLND_Pr_1_Navigation/blob/master/report.md)__
-
 
 ### Getting Started
 
@@ -46,3 +42,6 @@ __The final report summarizing the code implementation and my solution of the en
 2. Place the file in the DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file. 
 
 
+### Report 
+
+__The final report summarizing the code implementation and my solution of the environemnt is in the [`report.md`](https://github.com/bkocis/DRLND_Pr_1_Navigation/blob/master/report.md)__
